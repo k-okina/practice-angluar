@@ -6,6 +6,13 @@ import { AppComponent } from './app.component';
 import { CounterComponent } from './components/counter/counter.component';
 import { StoreModule } from '@ngrx/store';
 
+const reducer = { counter: counterReducer };
+
+export type RootReducerType = typeof reducer;
+
+export type RootStateType = {
+  [P in keyof RootReducerType]: ReturnType<RootReducerType[P]>;
+};
 
 @NgModule({
   declarations: [
@@ -14,7 +21,7 @@ import { StoreModule } from '@ngrx/store';
   ],
   imports: [
     BrowserModule,
-    StoreModule.forRoot({ counter: counterReducer })
+    StoreModule.forRoot(reducer),
   ],
   providers: [],
   bootstrap: [AppComponent]

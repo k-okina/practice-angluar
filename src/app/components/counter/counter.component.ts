@@ -1,11 +1,12 @@
 import {Component} from '@angular/core';
-import {Store, select} from '@ngrx/store';
+import {Store} from '@ngrx/store';
 import {Observable} from 'rxjs';
+import {tap} from 'rxjs/operators';
+import {RootStateType} from '../../app.module';
 import {INCREMENT, DECREMENT, RESET} from '../../counter';
 
-interface AppState {
-  count: number;
-}
+
+const getCount = (state: RootStateType) => state.counter;
 
 @Component({
   selector: 'app-counter',
@@ -16,12 +17,13 @@ export class CounterComponent {
   count$: Observable<number>;
   test: Promise<number>;
 
-  constructor(private store: Store<AppState>) {
-    this.count$ = store.pipe(select('counter'));
+  constructor(private store: Store<RootStateType>) {
+    this.count$ = store.select(getCount);
     this.test = new Promise((resolve, reject) => {
-      setTimeout(() => resolve(3), 3000);
+      setTimeout(() => resolve(3), 1000);
     });
-    console.log(this.count$);
+    this.test.then((value) => console.log('すごい 1'));
+    this.test.then((value) => console.log('すごい 2'));
   }
 
   increment() {
